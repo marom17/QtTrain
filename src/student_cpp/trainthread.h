@@ -2,19 +2,19 @@
 #define TRAINTHREAD_H
 
 #include <QThread>
+#include <QSemaphore>
 #include "locomotive.h"
 
-class TrainThread : QThread{
+class TrainThread : public QThread{
 public:
-    TrainThread(QVector<int> parcour, Locomotive* train)
-        : QThread(), parcour(parcour),train(train){}
+    TrainThread(QList<int> parcour, Locomotive* train, QList<QSemaphore *> sections)
+        : QThread(), parcour(parcour),train(train), sections(sections){}
 
 private:
-    virtual void run() Q_DECL_OVERRIDE{
+    virtual void run() Q_DECL_OVERRIDE;
 
-    }
-
-    QVector<int> parcour;
+    QList<QSemaphore *> sections;
+    QList<int> parcour;
     Locomotive* train;
 };
 
