@@ -7,11 +7,15 @@
 static Locomotive locomotive;
 static Locomotive loco2;
 
+//Creation de trains threades
+static TrainThread trainUn;
+static TrainThread trainDeux;
+
 //Arret d'urgence
 void emergency_stop()
 {
-    locomotive.arreter();
-    afficher_message("\nSTOP!");
+    trainUn.requestInterruption();
+    trainDeux.requestInterruption();
 }
 
 //Fonction principale
@@ -53,20 +57,26 @@ int cmain()
     locomotive.fixerVitesse(12);
     locomotive.fixerPosition(16, 23);
     locomotive.allumerPhares();
-    locomotive.demarrer();
+    //locomotive.demarrer();
     locomotive.afficherMessage("Ready!");
 
     loco2.fixerNumero(2);
     loco2.fixerVitesse(14);
     loco2.fixerPosition(13,19);
     loco2.allumerPhares();
-    loco2.demarrer();
+    //loco2.demarrer();
     loco2.afficherMessage("Loco2 Ready");
 
-    TrainThread tthread(parcours, &locomotive, sections);
-    TrainThread tthread2(parcours2, &loco2, sections);
-    tthread.start();
-    tthread2.start();
+    trainUn.setParcour(parcours);
+    trainUn.setTrain(&locomotive);
+    trainUn.setSections(sections);
+
+    trainDeux.setParcour(parcours2);
+    trainDeux.setTrain(&loco2);
+    trainDeux.setSections(sections);
+
+    trainUn.start();
+    trainDeux.start();
 
     //Attente du passage sur les contacts
     /*for (int i = 1; i < parcours.size(); i++) {
@@ -80,8 +90,8 @@ int cmain()
     locomotive.afficherMessage("Yeah, piece of cake!");*/
 
     //Fin de la simulation
-    tthread.wait();
-    tthread2.wait();
+    trainUn.wait();
+    trainDeux.wait();
     mettre_maquette_hors_service();
 
     //Exemple de commande
