@@ -55,6 +55,7 @@ int cmain()
     diriger_aiguillage(19, TOUT_DROIT,  0);
     diriger_aiguillage(16, TOUT_DROIT,  0);
 
+
     //Initialisation de la locomotive
     locomotive.fixerNumero(1);
     locomotive.fixerVitesse(12);
@@ -78,15 +79,6 @@ int cmain()
 
 
     //Attente du passage sur les contacts
-    /*for (int i = 1; i < parcours.size(); i++) {
-        attendre_contact(parcours.at(i));
-        afficher_message(qPrintable(QString("The engine no. %1 has reached contact no. %2.").arg(locomotive.numero()).arg(parcours.at(i))));
-        locomotive.afficherMessage(QString("I've reached contact no. %1.").arg(parcours.at(i)));
-    }
-
-    //Arreter la locomotive
-    locomotive.arreter();
-    locomotive.afficherMessage("Yeah, piece of cake!");*/
 
     //Fin de la simulation
 
