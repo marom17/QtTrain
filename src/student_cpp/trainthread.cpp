@@ -7,8 +7,10 @@ void TrainThread::run() {
     while(true) {
 
         for (int i = 1; i < parcour.size(); i++) {
+            //Stop le train car acquire est bloquant
             train->arreter();
             sections.at(parcour.at(i)-1)->acquire();
+            //Redémarre le train quand tronçon libre
             train->demarrer();
             attendre_contact(parcour.at(i));
             sections.at(parcour.at(i)-1)->release();
@@ -16,6 +18,7 @@ void TrainThread::run() {
             train->afficherMessage(QString("I've reached contact no. %1.").arg(parcour.at(i)));
 
 
+            //Stop le train si arrêt d'urgence
             if(isInterruptionRequested()){
                 train->arreter();
                 return;
@@ -23,6 +26,7 @@ void TrainThread::run() {
         }
 
         nbrTour++;
+        //Change de sens tous les 2 tours
         if(nbrTour % 2 == 0){
             train->arreter();
             inverser_sens_loco(train->numero());
