@@ -53,14 +53,14 @@ int cmain()
     locomotive.fixerVitesse(12);
     locomotive.fixerPosition(16, 23);
     locomotive.allumerPhares();
-    locomotive.demarrer();
+    //locomotive.demarrer();
     locomotive.afficherMessage("Ready!");
 
     loco2.fixerNumero(2);
     loco2.fixerVitesse(14);
     loco2.fixerPosition(13,19);
     loco2.allumerPhares();
-    loco2.demarrer();
+    //loco2.demarrer();
     loco2.afficherMessage("Loco2 Ready");
 
     TrainThread tthread(parcours, &locomotive, sections);
