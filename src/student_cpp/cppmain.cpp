@@ -7,15 +7,17 @@
 static Locomotive locomotive;
 static Locomotive loco2;
 
-//Creation de trains threades
-static TrainThread trainUn;
-static TrainThread trainDeux;
+
+TrainThread* tthread1;
+TrainThread* tthread2;
+
 
 //Arret d'urgence
 void emergency_stop()
 {
-    trainUn.requestInterruption();
-    trainDeux.requestInterruption();
+    afficher_message("\nSTOP!");
+    tthread1->requestInterruption();
+    tthread2->requestInterruption();
 }
 
 //Fonction principale
@@ -42,6 +44,7 @@ int cmain()
     diriger_aiguillage(11, TOUT_DROIT,  0);
     diriger_aiguillage(17, TOUT_DROIT,  0);
     diriger_aiguillage(23, TOUT_DROIT,  0);
+    diriger_aiguillage(5 , TOUT_DROIT,  0);
 
     diriger_aiguillage(4,  TOUT_DROIT,  0);
     diriger_aiguillage(10, TOUT_DROIT,  0);
@@ -67,16 +70,12 @@ int cmain()
     //loco2.demarrer();
     loco2.afficherMessage("Loco2 Ready");
 
-    trainUn.setParcour(parcours);
-    trainUn.setTrain(&locomotive);
-    trainUn.setSections(sections);
 
-    trainDeux.setParcour(parcours2);
-    trainDeux.setTrain(&loco2);
-    trainDeux.setSections(sections);
+    tthread1 = new TrainThread(parcours, &locomotive, sections);
+    tthread2 = new TrainThread(parcours2, &loco2, sections);
+    tthread1->start();
+    tthread2->start();
 
-    trainUn.start();
-    trainDeux.start();
 
     //Attente du passage sur les contacts
     /*for (int i = 1; i < parcours.size(); i++) {
@@ -90,8 +89,10 @@ int cmain()
     locomotive.afficherMessage("Yeah, piece of cake!");*/
 
     //Fin de la simulation
-    trainUn.wait();
-    trainDeux.wait();
+
+    tthread1->wait();
+    tthread2->wait();
+
     mettre_maquette_hors_service();
 
     //Exemple de commande

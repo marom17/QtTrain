@@ -2,67 +2,38 @@
 #include "ctrain_handler.h"
 
 void TrainThread::run() {
+
+    train->demarrer();
     while(true) {
-        train->demarrer();
+
         for (int i = 1; i < parcour.size(); i++) {
             attendre_contact(parcour.at(i));
             afficher_message(qPrintable(QString("The engine no. %1 has reached contact no. %2.").arg(train->numero()).arg(parcour.at(i))));
             train->afficherMessage(QString("I've reached contact no. %1.").arg(parcour.at(i)));
-            if(isInterruptionRequested()) {
+
+
+            if(isInterruptionRequested()){
                 train->arreter();
-                train->afficherMessage("Recu interruption");
                 return;
             }
-            noTour++;
-            //Arreter la locomotive
-            if(!(noTour %= 2)) {
-                train->arreter();
-                inverser_sens_loco(train->numero());
-                for(int i = 0; i < parcour.size()/2; i++) {
-                    parcour.swap(i, parcour.size()-(1+i));
-                }
+        }
 
-            }
+        nbrTour++;
+        if(nbrTour % 2 == 0){
+            train->arreter();
+            inverser_sens_loco(train->numero());
+            for(int k = 0; k < (parcour.size()/2); k++)
+                parcour.swap(k,parcour.size()-(1+k));
+            train->demarrer();
 
         }
-        return;
+
+        //Arreter la locomotive
+
+        train->afficherMessage("Yeah, piece of cake!");
     }
-}
-QList<QSemaphore *> TrainThread::getSections() const
-{
-    return sections;
-}
+    return;
 
-void TrainThread::setSections(const QList<QSemaphore *> &value)
-{
-    sections = value;
-}
-QList<int> TrainThread::getParcour() const
-{
-    return parcour;
-}
-
-void TrainThread::setParcour(const QList<int> &value)
-{
-    parcour = value;
-}
-Locomotive *TrainThread::getTrain() const
-{
-    return train;
-}
-
-void TrainThread::setTrain(Locomotive *value)
-{
-    train = value;
-}
-int TrainThread::getNoTour() const
-{
-    return noTour;
-}
-
-void TrainThread::setNoTour(int value)
-{
-    noTour = value;
 }
 
 

@@ -11,19 +11,8 @@ public:
         QThread() {}
 
     TrainThread(QList<int> parcour, Locomotive* train, QList<QSemaphore *> sections)
-        : QThread(), parcour(parcour),train(train), sections(sections), noTour(0) {}
 
-    QList<QSemaphore *> getSections() const;
-    void setSections(const QList<QSemaphore *> &value);
-
-    QList<int> getParcour() const;
-    void setParcour(const QList<int> &value);
-
-    Locomotive *getTrain() const;
-    void setTrain(Locomotive *value);
-
-    int getNoTour() const;
-    void setNoTour(int value);
+        : QThread(), parcour(parcour),train(train), sections(sections) {nbrTour = 0;}
 
 private:
     virtual void run() Q_DECL_OVERRIDE;
@@ -31,7 +20,8 @@ private:
     QList<QSemaphore *> sections;
     QList<int> parcour;
     Locomotive* train;
-    int noTour;
+
+    int nbrTour;
 };
 
 #endif // TRAINTHREAD_H
