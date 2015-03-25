@@ -34,7 +34,11 @@ int cmain()
     QList<int> parcours2;
     parcours2 << 12 << 11 << 10 << 4 << 3 << 2 << 1 << 31 << 30 << 29 << 28 << 22 << 21 << 20;
     QList<QSemaphore *> sections;
+
+    //Mise en place du tableau de semaphore
+    for(int i=0;i<36;i++){
     sections << new QSemaphore(1);
+    }
 
     //Initialisation des aiguillages
     diriger_aiguillage(8,  DEVIE,       0);
