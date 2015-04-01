@@ -13,18 +13,16 @@ void TrainThread::run() {
             //Redémarre le train quand tronçon libre
             train->demarrer();
             attendre_contact(parcour.at(i));
-            int j = i+1 % parcour.size();
+            int j = (i+1) % (parcour.size());
             changerAiguillage(parcour.at(i), parcour.at(j));
             sections.at(parcour.at(i)-1)->release();
 
             afficher_message(qPrintable(QString("The engine no. %1 has reached contact no. %2.").arg(train->numero()).arg(parcour.at(i))));
             train->afficherMessage(QString("I've reached contact no. %1.").arg(parcour.at(i)));
 
-            diriger_aiguillage(6, TOUT_DROIT,  0);
-
 
             //Stop le train si arrêt d'urgence
-            if(isInterruptionRequested()){
+            if(isInterruptionRequested()) {
                 train->arreter();
                 return;
             }
@@ -33,7 +31,7 @@ void TrainThread::run() {
         nbrTour++;
 
         //Change de sens tous les 2 tours
-        if(nbrTour % 2 == 0){
+        if(nbrTour % 2 == 0) {
 
             train->arreter();
             inverser_sens_loco(train->numero());
@@ -54,9 +52,7 @@ void TrainThread::run() {
 void TrainThread::changerAiguillage(int sectionCourrante, int sectionSuivante) {
     switch (sectionCourrante) {
     case 1:
-        if(sectionSuivante == 31)
-            return;
-        else if(sectionSuivante == 2) {
+        if(sectionSuivante == 2) {
             diriger_aiguillage(1,  TOUT_DROIT,  0);
             return;
         } else if (sectionSuivante == 6) {
@@ -87,29 +83,29 @@ void TrainThread::changerAiguillage(int sectionCourrante, int sectionSuivante) {
         } else
             return;
     case 5:
-        if(sectionSuivante == 6){
+        if(sectionSuivante == 6) {
             diriger_aiguillage(2,DEVIE,0);
             return;
         } else {
             return;
         }
     case 6:
-        if(sectionSuivante == 1){
+        if(sectionSuivante == 1) {
             diriger_aiguillage(1,DEVIE,0);
             diriger_aiguillage(2,TOUT_DROIT,0);
             return;
-        } else if (sectionSuivante == 5){
+        } else if (sectionSuivante == 5) {
             diriger_aiguillage(2,DEVIE,0);
             return;
-        } else if (sectionSuivante == 4){
+        } else if (sectionSuivante == 4) {
             diriger_aiguillage(4,DEVIE,0);
             diriger_aiguillage(3,TOUT_DROIT,0);
             return;
-        } else if (sectionSuivante == 7){
+        } else if (sectionSuivante == 7) {
             diriger_aiguillage(3, DEVIE, 0);
             diriger_aiguillage(5,TOUT_DROIT,0);
             return;
-        } else if (sectionSuivante == 8){
+        } else if (sectionSuivante == 8) {
             diriger_aiguillage(3, DEVIE, 0);
             diriger_aiguillage(5,DEVIE,0);
             return;
@@ -117,11 +113,30 @@ void TrainThread::changerAiguillage(int sectionCourrante, int sectionSuivante) {
             return;
         }
     case 7:
-        break;
+        if(sectionSuivante == 6) {
+            diriger_aiguillage(5,TOUT_DROIT,0);
+            diriger_aiguillage(3,DEVIE,0);
+            return;
+        } else
+            return;
     case 8:
-        break;
+        if(sectionSuivante == 6) {
+            diriger_aiguillage(5,DEVIE,0);
+            diriger_aiguillage(3,DEVIE,0);
+            return;
+        } else
+            return;
     case 9:
-        break;
+        if(sectionSuivante == 27) {
+            diriger_aiguillage(6,DEVIE,0);
+            diriger_aiguillage(18,DEVIE,0);
+            return;
+        } else if (sectionSuivante == 35) {
+            diriger_aiguillage(6,TOUT_DROIT,0);
+            diriger_aiguillage(24,TOUT_DROIT,0);
+            return;
+        } else
+            return;
     case 10:
         if (sectionSuivante == 11) {
             diriger_aiguillage(7, TOUT_DROIT, 0);
@@ -132,61 +147,213 @@ void TrainThread::changerAiguillage(int sectionCourrante, int sectionSuivante) {
         }
         break;
     case 11:
-        break;
+        if(sectionSuivante == 10) {
+            diriger_aiguillage(7, TOUT_DROIT, 0);
+        } else {
+            return;
+        }
     case 12:
-        break;
+        if(sectionSuivante == 13) {
+            diriger_aiguillage(10,  TOUT_DROIT,  0);
+            return;
+        } else
+            return;
     case 13:
-        break;
+        if(sectionSuivante == 12) {
+            diriger_aiguillage(1,  TOUT_DROIT,  0);
+            return;
+        } else if (sectionSuivante == 15) {
+            diriger_aiguillage(1,  DEVIE,  0);
+            diriger_aiguillage(9,  TOUT_DROIT,  0);
+            return;
+        } else {
+            return;
+        }
     case 14:
-        break;
+        if(sectionSuivante == 14) {
+            diriger_aiguillage(8,TOUT_DROIT,0);
+            diriger_aiguillage(11,DEVIE,0);
+            return;
+        } else
+            return;
     case 15:
-        break;
+        if (sectionSuivante == 16) {
+            diriger_aiguillage(9,DEVIE,0);
+            return;
+        } else if (sectionSuivante == 18) {
+            diriger_aiguillage(11, DEVIE, 0);
+            diriger_aiguillage(8,DEVIE,0);
+            return;
+        } else {
+            return changerAiguillage(sectionSuivante,sectionCourrante);
+        }
     case 16:
-        break;
+        if(sectionSuivante == 15) {
+            diriger_aiguillage(9,DEVIE,0);
+            return;
+        } else {
+            return;
+        }
     case 17:
-        break;
+        if(sectionSuivante == 35) {
+            diriger_aiguillage(12,DEVIE,0);
+            diriger_aiguillage(24,DEVIE,0);
+            return;
+        } else if (sectionSuivante == 27) {
+            diriger_aiguillage(12,TOUT_DROIT,0);
+            diriger_aiguillage(18,TOUT_DROIT,0);
+            return;
+        } else {
+            return;
+        }
     case 18:
-        break;
+        if(sectionSuivante == 15) {
+            diriger_aiguillage(11, DEVIE, 0);
+            diriger_aiguillage(8,DEVIE,0);
+            return;
+        } else {
+            return;
+        }
     case 19:
-        break;
+        if(sectionSuivante == 20) {
+            diriger_aiguillage(13,  TOUT_DROIT,  0);
+            return;
+        } else if (sectionSuivante == 24) {
+            diriger_aiguillage(13,  DEVIE,  0);
+            diriger_aiguillage(14,TOUT_DROIT,0);
+            return;
+        } else {
+            return;
+        }
     case 20:
-        break;
+        if(sectionSuivante == 19) {
+            diriger_aiguillage(13,TOUT_DROIT,0);
+            return;
+        } else {
+            return;
+        }
     case 21:
-        break;
+        if(sectionSuivante == 22) {
+            diriger_aiguillage(16,TOUT_DROIT,0);
+            return;
+        } else {
+            return;
+        }
     case 22:
-        break;
+        if(sectionSuivante == 21) {
+            diriger_aiguillage(16,TOUT_DROIT,0);
+            return;
+        } else if (sectionSuivante == 24) {
+            diriger_aiguillage(15,TOUT_DROIT,0);
+            diriger_aiguillage(16,DEVIE,0);
+            return;
+        } else return;
     case 23:
-        break;
+        if(sectionSuivante == 24) {
+            diriger_aiguillage(14,DEVIE,0);
+            return;
+        } else return;
     case 24:
-        break;
+        if(sectionSuivante == 22) {
+            diriger_aiguillage(15,TOUT_DROIT,0);
+            diriger_aiguillage(16,DEVIE,0);
+            return;
+        } else if (sectionSuivante == 23) {
+            diriger_aiguillage(14,DEVIE,0);
+            return;
+        } else if (sectionSuivante == 19) {
+            diriger_aiguillage(14,TOUT_DROIT,0);
+            diriger_aiguillage(13,DEVIE,0);
+            return;
+        } else if (sectionSuivante == 25) {
+            diriger_aiguillage(17,TOUT_DROIT,0);
+            diriger_aiguillage(15,DEVIE,0);
+            return;
+        } else if (sectionSuivante == 26) {
+            diriger_aiguillage(15,DEVIE,0);
+            diriger_aiguillage(17,DEVIE,0);
+            return;
+        } else return;
     case 25:
-        break;
+        if(sectionSuivante == 24) {
+            diriger_aiguillage(17,TOUT_DROIT,0);
+            diriger_aiguillage(15,DEVIE,0);
+            return;
+        } else return;
     case 26:
-        break;
+        if(sectionSuivante == 24) {
+            diriger_aiguillage(17,DEVIE,0);
+            diriger_aiguillage(15,DEVIE,0);
+            return;
+        } else return;
     case 27:
-        break;
+        if(sectionSuivante == 9) {
+            diriger_aiguillage(18,DEVIE,0);
+            diriger_aiguillage(6,DEVIE,0);
+            return;
+        } else if (sectionSuivante == 17) {
+            diriger_aiguillage(18,TOUT_DROIT,0);
+            diriger_aiguillage(12,TOUT_DROIT,0);
+            return;
+        } else {
+            return;
+        }
     case 28:
-        break;
+        if(sectionSuivante == 29) {
+            diriger_aiguillage(19,TOUT_DROIT,0);
+            return;
+        } else if (sectionSuivante == 33) {
+            diriger_aiguillage(19,DEVIE,0);
+            diriger_aiguillage(20,TOUT_DROIT,0);
+            return;
+        } else return;
     case 29:
-        break;
+        if(sectionSuivante == 28) {
+            diriger_aiguillage(19,TOUT_DROIT,0);
+            return;
+        } else return;
     case 30:
-        break;
+        if(sectionSuivante == 31) {
+            diriger_aiguillage(22,TOUT_DROIT,0);
+            return;
+        } else return;
     case 31:
-        break;
+        if(sectionSuivante == 30) {
+            diriger_aiguillage(22,TOUT_DROIT,0);
+            return;
+        } else if (sectionSuivante == 33) {
+            diriger_aiguillage(22,DEVIE,0);
+            diriger_aiguillage(21,TOUT_DROIT,0);
+            return;
+        } else return;
     case 32:
-        break;
+        if(sectionSuivante == 33) {
+            diriger_aiguillage(23, TOUT_DROIT,0);
+            diriger_aiguillage(20,DEVIE,0);
+            return;
+        } else return;
     case 33:
-        break;
+        if(sectionSuivante == 34) {
+            diriger_aiguillage(21,DEVIE,0);
+            return;
+        } else if (sectionSuivante == 26) {
+            diriger_aiguillage(20,DEVIE,0);
+            diriger_aiguillage(23,DEVIE,0);
+        }
+        else {
+            changerAiguillage(sectionSuivante,sectionCourrante);
+            return;
+        }
     case 34:
-        break;
+        return changerAiguillage(sectionSuivante,sectionCourrante);
     case 35:
-        break;
+        if(sectionSuivante == 36) {
+            return;
+        } else {
+            return changerAiguillage(sectionSuivante, sectionCourrante);
+        }
     case 36:
-        break;
-    case 37:
-        break;
-    case 38:
-        break;
+        return changerAiguillage(sectionSuivante,sectionCourrante);
     }
 }
 

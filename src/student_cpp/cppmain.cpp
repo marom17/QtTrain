@@ -36,8 +36,8 @@ int cmain()
     QList<QSemaphore *> sections;
 
     //Mise en place du tableau de semaphore
-    for(int i=0;i<36;i++){
-    sections << new QSemaphore(1);
+    for(int i=0; i<36; i++) {
+        sections << new QSemaphore(1);
     }
 
     //Initialisation des aiguillages
