@@ -30,7 +30,7 @@ int cmain()
 
     //Initialisation d'un parcours
     QList<int> parcours;
-    parcours << 7 << 15 << 14 << 7 << 6 << 5 << 34 << 33 << 32 << 25 << 24;
+    parcours << 21 << 20 << 12 << 11 << 10 << 4 << 3 << 2 << 1 << 31 << 30 << 29 << 28 << 22 ;
     QList<int> parcours2;
     parcours2 << 12 << 11 << 10 << 4 << 3 << 2 << 1 << 31 << 30 << 29 << 28 << 22 << 21 << 20;
     QList<QSemaphore *> sections;
@@ -63,7 +63,7 @@ int cmain()
     //Initialisation de la locomotive
     locomotive.fixerNumero(1);
     locomotive.fixerVitesse(12);
-    locomotive.fixerPosition(16, 23);
+    locomotive.fixerPosition(20, 21);
     locomotive.allumerPhares();
     //locomotive.demarrer();
     locomotive.afficherMessage("Ready!");
