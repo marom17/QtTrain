@@ -30,9 +30,9 @@ int cmain()
 
     //Initialisation d'un parcours
     QList<int> parcours;
-    parcours << 7 << 15 << 14 << 7 << 6 << 5 << 34 << 33 << 32 << 25 << 24;
+    parcours  << 13 << 15 << 14 << 7 << 6 << 1 << 31 << 30 << 29 << 28 << 22 << 21 << 20 << 19;
     QList<int> parcours2;
-    parcours2 << 12 << 11 << 10 << 4 << 3 << 2 << 1 << 31 << 30 << 29 << 28 << 22 << 21 << 20;
+    parcours2 << 16 << 15 << 14 << 7 << 6 << 5 << 34 << 33 << 32 << 25 << 24 << 23;
     QList<QSemaphore *> sections;
 
     //Mise en place du tableau de semaphore
@@ -63,16 +63,16 @@ int cmain()
     //Initialisation de la locomotive
     locomotive.fixerNumero(1);
     locomotive.fixerVitesse(12);
-    locomotive.fixerPosition(16, 23);
+    locomotive.fixerPosition(13, 19);
     locomotive.allumerPhares();
     //locomotive.demarrer();
     locomotive.afficherMessage("Ready!");
 
     loco2.fixerNumero(2);
     loco2.fixerVitesse(14);
-    loco2.fixerPosition(13,19);
+    loco2.fixerPosition(16,23);
     loco2.allumerPhares();
-    //loco2.demarrer();
+    loco2.demarrer();
     loco2.afficherMessage("Loco2 Ready");
 
 
@@ -87,7 +87,7 @@ int cmain()
     //Fin de la simulation
 
     tthread1->wait();
-    tthread2->wait();
+    //tthread2->wait();
 
     mettre_maquette_hors_service();
 
