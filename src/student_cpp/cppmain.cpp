@@ -33,12 +33,7 @@ int cmain()
     parcours  << 13 << 15 << 14 << 7 << 6 << 1 << 31 << 30 << 29 << 28 << 22 << 21 << 20 << 19;
     QList<int> parcours2;
     parcours2 << 16 << 15 << 14 << 7 << 6 << 5 << 34 << 33 << 32 << 25 << 24 << 23;
-    QList<QSemaphore *> sections;
-
-    //Mise en place du tableau de semaphore
-    for(int i=0; i<36; i++) {
-        sections << new QSemaphore(1);
-    }
+    QSemaphore* sectionCritique = new QSemaphore(1);
 
     //Initialisation des aiguillages
     diriger_aiguillage(8,  DEVIE,       0);
@@ -76,8 +71,8 @@ int cmain()
     loco2.afficherMessage("Loco2 Ready");
 
 
-    tthread1 = new TrainThread(parcours, &locomotive, sections);
-    tthread2 = new TrainThread(parcours2, &loco2, sections);
+    tthread1 = new TrainThread(parcours, &locomotive, sectionCritique);
+    tthread2 = new TrainThread(parcours2, &loco2, sectionCritique);
     tthread1->start();
     tthread2->start();
 

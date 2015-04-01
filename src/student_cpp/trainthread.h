@@ -10,9 +10,9 @@ public:
     TrainThread() :
         QThread() {}
 
-    TrainThread(QList<int> parcour, Locomotive* train, QList<QSemaphore *> sections)
+    TrainThread(QList<int> parcour, Locomotive* train, QSemaphore* sectionCritique)
 
-        : QThread(), parcour(parcour),train(train), sections(sections) {
+        : QThread(), parcour(parcour),train(train), sectionCritique(sectionCritique) {
         nbrTour = 0;
     }
 
@@ -20,7 +20,7 @@ private:
     virtual void run() Q_DECL_OVERRIDE;
     void changerAiguillage(int sectionCourrante, int sectionSuivante);
 
-    QList<QSemaphore *> sections;
+    QSemaphore* sectionCritique;
     QList<int> parcour;
     Locomotive* train;
 

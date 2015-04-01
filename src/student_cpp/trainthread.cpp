@@ -10,16 +10,15 @@ void TrainThread::run() {
             //Stop le train car acquire est bloquant
             train->arreter();
 
-            sections.at(parcour.at(i-1%parcour.size())-1)->acquire();
-            sections.at(parcour.at(i%parcour.size())-1)->acquire();
+            if(parcour.at(i)==6||parcour.at(i)==15)
+            sectionCritique->acquire();
 
             //Redémarre le train quand tronçon libre
             train->demarrer();
             attendre_contact(parcour.at(i));
             int j = (i+1) % (parcour.size());
             changerAiguillage(parcour.at(i), parcour.at(j));
-            sections.at(parcour.at(i%parcour.size())-1)->release();
-            sections.at(parcour.at(i-1%parcour.size())-1)->release();
+            sectionCritique->release();
 
             afficher_message(qPrintable(QString("The engine no. %1 has reached contact no. %2.").arg(train->numero()).arg(parcour.at(i))));
             train->afficherMessage(QString("I've reached contact no. %1.").arg(parcour.at(i)));
