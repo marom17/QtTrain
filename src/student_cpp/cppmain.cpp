@@ -30,9 +30,9 @@ int cmain()
 
     //Initialisation d'un parcours
     QList<int> parcours;
-    parcours  << 13 << 15 << 14 << 7 << 6 << 1 << 31 << 30 << 29 << 28 << 22 << 21 << 20 << 19;
+    parcours  << 19 << 13 << 15 << 14 << 7 << 6 << 1 << 31 << 30 << 29 << 28 << 22 << 21 << 20;
     QList<int> parcours2;
-    parcours2 << 16 << 15 << 14 << 7 << 6 << 5 << 34 << 33 << 32 << 25 << 24 << 23;
+    parcours2 << 23 << 16 << 15 << 14 << 7 << 6 << 5 << 34 << 33 << 32 << 25 << 24;
     QSemaphore* sectionCritique = new QSemaphore(1);
 
     //Initialisation des aiguillages
@@ -46,7 +46,7 @@ int cmain()
     diriger_aiguillage(5 , TOUT_DROIT,  0);
 
     diriger_aiguillage(4,  TOUT_DROIT,  0);
-    diriger_aiguillage(10, TOUT_DROIT,  0);
+    diriger_aiguillage(10, DEVIE,  0);
     diriger_aiguillage(13, TOUT_DROIT,  0);
     diriger_aiguillage(7,  TOUT_DROIT,  0);
     diriger_aiguillage(1,  TOUT_DROIT,  0);
@@ -58,14 +58,14 @@ int cmain()
     //Initialisation de la locomotive
     locomotive.fixerNumero(1);
     locomotive.fixerVitesse(12);
-    locomotive.fixerPosition(13, 19);
+    locomotive.fixerPosition(19, 20);
     locomotive.allumerPhares();
     //locomotive.demarrer();
     locomotive.afficherMessage("Ready!");
 
     loco2.fixerNumero(2);
     loco2.fixerVitesse(14);
-    loco2.fixerPosition(16,23);
+    loco2.fixerPosition(23,24);
     loco2.allumerPhares();
     loco2.demarrer();
     loco2.afficherMessage("Loco2 Ready");

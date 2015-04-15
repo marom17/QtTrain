@@ -6,19 +6,27 @@ void TrainThread::run() {
     train->demarrer();
     while(true) {
 
+        int entreeCritique=0;
         for (int i = 1; i < parcour.size(); i++) {
             //Stop le train car acquire est bloquant
             train->arreter();
 
-            if(parcour.at(i)==6||parcour.at(i)==15)
-            sectionCritique->acquire();
+            if(entreeCritique==0&&(parcour.at(i)==13||parcour.at(i)==1||parcour.at(i)==16||parcour.at(i)==5)){
+                entreeCritique=parcour.at(i);
+                sectionCritique->acquire();
+            }
 
             //Redémarre le train quand tronçon libre
             train->demarrer();
             attendre_contact(parcour.at(i));
             int j = (i+1) % (parcour.size());
             changerAiguillage(parcour.at(i), parcour.at(j));
-            sectionCritique->release();
+
+            if(entreeCritique!=parcour.at(i)&&(parcour.at(i)==13||parcour.at(i)==1||parcour.at(i)==16||parcour.at(i)==5)){
+                entreeCritique=0;
+                sectionCritique->release();
+            }
+
 
             afficher_message(qPrintable(QString("The engine no. %1 has reached contact no. %2.").arg(train->numero()).arg(parcour.at(i))));
             train->afficherMessage(QString("I've reached contact no. %1.").arg(parcour.at(i)));
