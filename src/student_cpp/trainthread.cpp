@@ -8,16 +8,18 @@ void TrainThread::run() {
 
         int entreeCritique=0;
         for (int i = 1; i < parcour.size(); i++) {
-            //Stop le train car acquire est bloquant
-            train->arreter();
+
 
             if(entreeCritique==0&&(parcour.at(i)==13||parcour.at(i)==1||parcour.at(i)==16||parcour.at(i)==5)){
+                //Stop le train car acquire est bloquant
+                train->arreter();
                 entreeCritique=parcour.at(i);
                 sectionCritique->acquire();
+                //Redémarre le train quand tronçon libre
+                train->demarrer();
             }
 
-            //Redémarre le train quand tronçon libre
-            train->demarrer();
+
             attendre_contact(parcour.at(i));
             int j = (i+1) % (parcour.size());
             changerAiguillage(parcour.at(i), parcour.at(j));
