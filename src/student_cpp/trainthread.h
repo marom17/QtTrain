@@ -4,15 +4,16 @@
 #include <QThread>
 #include <QSemaphore>
 #include "locomotive.h"
+#include "managerseccritique.h"
 
 class TrainThread : public QThread {
 public:
     TrainThread() :
         QThread() {}
 
-    TrainThread(QList<int> parcour, Locomotive* train, QSemaphore* sectionCritique)
+    TrainThread(QList<int> parcour, Locomotive* train, QSemaphore* sectionCritique, ManagerSecCritique* manager)
 
-        : QThread(), parcour(parcour),train(train), sectionCritique(sectionCritique) {
+        : QThread(), parcour(parcour),train(train), sectionCritique(sectionCritique), manager(manager) {
         nbrTour = 0;
     }
 
@@ -25,6 +26,9 @@ private:
     Locomotive* train;
 
     int nbrTour;
+    int priorite;
+
+    ManagerSecCritique* manager;
 };
 
 #endif // TRAINTHREAD_H
