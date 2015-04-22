@@ -11,13 +11,16 @@ public:
     ~ManagerSecCritique();
 
     void requete(int prio);
-    void entree();
+    void entree(Locomotive *train, int prio);
     void sortie();
 
 private:
     QSemaphore* mutex;
+    QSemaphore* waitAccess;
 
     int prioActuelle;
+    bool occuppe;
+    int nbWaiting;
 };
 
 #endif // MANAGERSECCRITIQUE_H
