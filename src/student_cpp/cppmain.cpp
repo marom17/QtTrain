@@ -10,6 +10,7 @@ static Locomotive loco2;
 
 TrainThread* tthread1;
 TrainThread* tthread2;
+ManagerSecCritique* manager;
 
 
 //Arret d'urgence
@@ -71,8 +72,8 @@ int cmain()
     loco2.afficherMessage("Loco2 Ready");
 
 
-    tthread1 = new TrainThread(parcours, &locomotive, sectionCritique);
-    tthread2 = new TrainThread(parcours2, &loco2, sectionCritique);
+    tthread1 = new TrainThread(parcours, &locomotive, sectionCritique,manager,2);
+    tthread2 = new TrainThread(parcours2, &loco2, sectionCritique,manager,1);
     tthread1->start();
     tthread2->start();
 

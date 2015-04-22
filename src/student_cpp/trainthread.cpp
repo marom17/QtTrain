@@ -7,13 +7,34 @@ void TrainThread::run() {
     while(true) {
 
         int entreeCritique=0;
+        return;
         for (int i = 1; i < parcour.size(); i++) {
 
+            //Envoit de la requête d'entrée en section critique
+            if(entreeCritique==0&&(parcour.at(i)==19||parcour.at(i)==23||parcour.at(i)==31||parcour.at(i)==34)){
+                manager->requete(priorite);
+                afficher_message((qPrintable(QString("The engine no. %1 ask for the critical section").arg((train->numero())))));
+                train->afficherMessage((QString("I've send my request for the critical section")));
+            }
 
+            //Entrée en section critique
+            if(parcour.at(i)==13||parcour.at(i)==16||parcour.at(i)==5||parcour.at(i)==1){
+                entreeCritique=parcour.at(i);
+                manager->entree(train,priorite);
+            }
+
+            attendre_contact(parcour.at(i));
+            int j = (i+1) % (parcour.size());
+            changerAiguillage(parcour.at(i), parcour.at(j));
 
             afficher_message(qPrintable(QString("The engine no. %1 has reached contact no. %2.").arg(train->numero()).arg(parcour.at(i))));
             train->afficherMessage(QString("I've reached contact no. %1.").arg(parcour.at(i)));
 
+            //Sortie de la section critique
+            if(entreeCritique!=parcour.at(i)&&(parcour.at(i)==13||parcour.at(i)==16||parcour.at(i)==5||parcour.at(i)==1)){
+                    entreeCritique=0;
+                    manager->sortie();
+                }
 
             //Stop le train si arrêt d'urgence
             if(isInterruptionRequested()) {

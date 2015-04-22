@@ -11,7 +11,7 @@ public:
     ~ManagerSecCritique();
 
     void requete(int prio);
-    void entree();
+    void entree(int prio);
     void sortie();
 
 private:

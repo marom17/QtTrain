@@ -11,9 +11,9 @@ public:
     TrainThread() :
         QThread() {}
 
-    TrainThread(QList<int> parcour, Locomotive* train, QSemaphore* sectionCritique, ManagerSecCritique* manager)
+    TrainThread(QList<int> parcour, Locomotive* train, QSemaphore* sectionCritique, ManagerSecCritique* manager, int priorite)
 
-        : QThread(), parcour(parcour),train(train), sectionCritique(sectionCritique), manager(manager) {
+        : QThread(), parcour(parcour),train(train), sectionCritique(sectionCritique), manager(manager), priorite(priorite){
         nbrTour = 0;
     }
 
