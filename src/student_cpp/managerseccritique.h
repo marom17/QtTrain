@@ -3,6 +3,7 @@
 
 #include <QSemaphore>
 
+#include "locomotive.h"
 
 class ManagerSecCritique
 {
@@ -21,6 +22,7 @@ private:
     int prioActuelle;
     bool occuppe;
     int nbWaiting;
+    //QList<int> listePrio;
 };
 
 #endif // MANAGERSECCRITIQUE_H

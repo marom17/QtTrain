@@ -12,6 +12,7 @@ TrainThread* tthread1;
 TrainThread* tthread2;
 
 
+
 //Arret d'urgence
 void emergency_stop()
 {
@@ -34,6 +35,7 @@ int cmain()
     QList<int> parcours2;
     parcours2 << 23 << 16 << 15 << 14 << 7 << 6 << 5 << 34 << 33 << 32 << 25 << 24;
     QSemaphore* sectionCritique = new QSemaphore(1);
+    ManagerSecCritique* manager = new ManagerSecCritique();
 
     //Initialisation des aiguillages
     diriger_aiguillage(8,  DEVIE,       0);
@@ -71,8 +73,8 @@ int cmain()
     loco2.afficherMessage("Loco2 Ready");
 
 
-    tthread1 = new TrainThread(parcours, &locomotive, sectionCritique);
-    tthread2 = new TrainThread(parcours2, &loco2, sectionCritique);
+    tthread1 = new TrainThread(parcours, &locomotive, sectionCritique,manager,2);
+    tthread2 = new TrainThread(parcours2, &loco2, sectionCritique,manager,1);
     tthread1->start();
     tthread2->start();
 
