@@ -8,17 +8,20 @@ void TrainThread::run() {
     while(true) {
 
         int entreeCritique=0;
+
         for (int i = 0; i < parcour.size(); i++) {
 
             //Envoit de la requête d'entrée en section critique
-            if(entreeCritique==0 && (parcour.at(i)==19||parcour.at(i)==23||parcour.at(i)==31||parcour.at(i)==34)){
+            if(entreeCritique==0 && (parcour.at(i)==19||parcour.at(i)==23||parcour.at(i)==31||parcour.at(i)==34)) {
+
                 manager->requete(priorite);
                 afficher_message((qPrintable(QString("The engine no. %1 ask for the critical section").arg((train->numero())))));
                 train->afficherMessage((QString("I've send my request for the critical section")));
             }
 
             //Entrée en section critique
-            if(entreeCritique == 0 && (parcour.at(i)==13||parcour.at(i)==16||parcour.at(i)==5||parcour.at(i)==1)){
+            if(entreeCritique!=parcour.at(i)&&(parcour.at(i)==13||parcour.at(i)==16||parcour.at(i)==5||parcour.at(i)==1)) {
+
                 entreeCritique=parcour.at(i);
                 manager->entree(train,priorite);
             }
@@ -31,10 +34,15 @@ void TrainThread::run() {
             train->afficherMessage(QString("I've reached contact no. %1.").arg(parcour.at(i)));
 
             //Sortie de la section critique
-            if(entreeCritique!=parcour.at(i)&&(parcour.at(i)==13||parcour.at(i)==16||parcour.at(i)==5||parcour.at(i)==1)){
-                    entreeCritique=0;
-                    manager->sortie();
-                }
+            if(entreeCritique!=parcour.at(i)&&(parcour.at(i)==13||parcour.at(i)==16||parcour.at(i)==5||parcour.at(i)==1)) {
+                entreeCritique=0;
+                manager->sortie();
+            }
+
+            //Elimine le risque qu'une requête soit lancée après la sortie de la section critique
+            if(requete!=parcour.at(i)&&(parcour.at(i)==19||parcour.at(i)==23||parcour.at(i)==31||parcour.at(i)==34)) {
+                requete=0;
+            }
 
             //Stop le train si arrêt d'urgence
             if(isInterruptionRequested()) {
