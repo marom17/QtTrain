@@ -14,16 +14,14 @@ TrainThread* tthread2;
 
 
 //Arret d'urgence
-void emergency_stop()
-{
+void emergency_stop() {
     afficher_message("\nSTOP!");
     tthread1->requestInterruption();
     tthread2->requestInterruption();
 }
 
 //Fonction principale
-int cmain()
-{
+int cmain() {
     afficher_message("Hit play to start the simulation...");
 
     //Choix de la maquette

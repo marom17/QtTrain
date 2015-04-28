@@ -29,6 +29,9 @@ private:
     int priorite;
 
     ManagerSecCritique* manager;
+
+    bool enSecCritique;
+    bool debutSecCritique;
 };
 
 #endif // TRAINTHREAD_H

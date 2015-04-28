@@ -5,8 +5,7 @@
 
 #include "locomotive.h"
 
-class ManagerSecCritique
-{
+class ManagerSecCritique {
 public:
     ManagerSecCritique();
     ~ManagerSecCritique();

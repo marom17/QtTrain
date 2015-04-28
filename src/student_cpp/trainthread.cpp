@@ -1,29 +1,33 @@
 #include "trainthread.h"
 #include "ctrain_handler.h"
+#include <QDebug>
 
 void TrainThread::run() {
 
+    debutSecCritique = 0;
     train->demarrer();
 
     while(true) {
 
-        int entreeCritique=0;
-
         for (int i = 0; i < parcour.size(); i++) {
 
-            //Envoit de la requête d'entrée en section critique
-            if(entreeCritique==0 && (parcour.at(i)==19||parcour.at(i)==23||parcour.at(i)==31||parcour.at(i)==34)) {
+            train->afficherMessage(qPrintable(QString("i = %1").arg(i)));
 
-                manager->requete(priorite);
-                afficher_message((qPrintable(QString("The engine no. %1 ask for the critical section").arg((train->numero())))));
+            //Envoit de la requête d'entrée en section critique
+            if(!enSecCritique && (parcour.at(i)==19||parcour.at(i)==23||parcour.at(i)==31||parcour.at(i)==34)) {
                 train->afficherMessage((QString("I've send my request for the critical section")));
+                manager->requete(priorite);
+                //afficher_message((qPrintable(QString("The engine no. %1 ask for the critical section").arg((train->numero())))));
+
+
             }
 
             //Entrée en section critique
-            if(entreeCritique!=parcour.at(i)&&(parcour.at(i)==13||parcour.at(i)==16||parcour.at(i)==5||parcour.at(i)==1)) {
-
-                entreeCritique=parcour.at(i);
+            if(!enSecCritique && (parcour.at(i)==13||parcour.at(i)==16||parcour.at(i)==5||parcour.at(i)==1)) {
+                enSecCritique = true;
                 manager->entree(train,priorite);
+                train->afficherMessage(QString("I'm in the critical section"));
+                debutSecCritique = true;
             }
 
             attendre_contact(parcour.at(i));
@@ -34,15 +38,17 @@ void TrainThread::run() {
             train->afficherMessage(QString("I've reached contact no. %1.").arg(parcour.at(i)));
 
             //Sortie de la section critique
-            if(entreeCritique!=parcour.at(i)&&(parcour.at(i)==13||parcour.at(i)==16||parcour.at(i)==5||parcour.at(i)==1)) {
-                entreeCritique=0;
+            if(!debutSecCritique && enSecCritique && (parcour.at(i)==13||parcour.at(i)==16||parcour.at(i)==5||parcour.at(i)==1)) {
                 manager->sortie();
+                train->afficherMessage(QString("I left the critical section"));
             }
 
             //Elimine le risque qu'une requête soit lancée après la sortie de la section critique
-            if(requete!=parcour.at(i)&&(parcour.at(i)==19||parcour.at(i)==23||parcour.at(i)==31||parcour.at(i)==34)) {
-                requete=0;
+            if(!debutSecCritique && enSecCritique && (parcour.at(i)==19||parcour.at(i)==23||parcour.at(i)==31||parcour.at(i)==34)) {
+                enSecCritique=false;
             }
+
+            debutSecCritique = false;
 
             //Stop le train si arrêt d'urgence
             if(isInterruptionRequested()) {
@@ -68,7 +74,7 @@ void TrainThread::run() {
 
         train->afficherMessage("Yeah, piece of cake!");
     }
-
+    qDebug() << "We do reach this ????" << endl;
     return;
 
 }
@@ -363,8 +369,7 @@ void TrainThread::changerAiguillage(int sectionCourrante, int sectionSuivante) {
         } else if (sectionSuivante == 26) {
             diriger_aiguillage(20,DEVIE,0);
             diriger_aiguillage(23,DEVIE,0);
-        }
-        else {
+        } else {
             changerAiguillage(sectionSuivante,sectionCourrante);
             return;
         }

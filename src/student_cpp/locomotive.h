@@ -3,8 +3,7 @@
 
 #include <QString>
 
-class Locomotive
-{
+class Locomotive {
 
 public:
 
