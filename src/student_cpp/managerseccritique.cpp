@@ -40,15 +40,11 @@ ManagerSecCritique::~ManagerSecCritique() {
  * avec sa priorite.
  */
 void ManagerSecCritique::requete(int prio) {
-    qDebug() << "New request" << prio << endl;
     mutex->acquire();
-    qDebug() << "Mutex Acquired request" << endl;
     if(prio > prioActuelle)
         prioActuelle = prio;
-    //listePrio.append(prio);
     mutex->release();
-    qDebug() << "Mutex Released request" << endl;
-}
+ }
 
 /*
  * Point d'entree de la section critique.
@@ -58,10 +54,10 @@ void ManagerSecCritique::requete(int prio) {
 void ManagerSecCritique::entree(Locomotive *train, int prio) {
     mutex->acquire();
     // Il y a deja un train
+    bool arrete = false;
     while (occuppe) {
         nbWaiting ++;
         mutex->release();
-        qDebug() << "Mutex Released entry 1" << endl;
         if(!arrete) {
             train->arreter();
             arrete = true;
@@ -101,7 +97,6 @@ void ManagerSecCritique::sortie() {
 
     } else {
         mutex->release();
-        qDebug() << "Mutex Released exit" << endl;
     }
 
 }
