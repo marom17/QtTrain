@@ -2,24 +2,23 @@
 #include "ctrain_handler.h"
 #include <QDebug>
 
-void TrainThread::run() {
+/*
+ * Auteurs : Kobel Nicolas
+ *           Maillard Romain
+ */
 
-    debutSecCritique = 0;
+
+void TrainThread::run() {
     train->demarrer();
 
     while(true) {
 
         for (int i = 0; i < parcour.size(); i++) {
 
-            train->afficherMessage(qPrintable(QString("i = %1").arg(i)));
-
             //Envoit de la requête d'entrée en section critique
             if(!enSecCritique && (parcour.at(i)==19||parcour.at(i)==23||parcour.at(i)==31||parcour.at(i)==34)) {
                 train->afficherMessage((QString("I've send my request for the critical section")));
                 manager->requete(priorite);
-                //afficher_message((qPrintable(QString("The engine no. %1 ask for the critical section").arg((train->numero())))));
-
-
             }
 
             //Entrée en section critique
@@ -69,16 +68,14 @@ void TrainThread::run() {
             train->demarrer();
 
         }
-
-        //Arreter la locomotive
-
-        train->afficherMessage("Yeah, piece of cake!");
     }
-    qDebug() << "We do reach this ????" << endl;
     return;
 
 }
 
+/*
+ * Change les aiguiallges pour permettre de passer le circuit
+ */
 void TrainThread::changerAiguillage(int sectionCourrante, int sectionSuivante) {
     switch (sectionCourrante) {
     case 1:

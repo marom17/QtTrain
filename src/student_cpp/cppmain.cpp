@@ -3,6 +3,22 @@
 #include "trainthread.h"
 #include <QList>
 
+/*
+ * Programme principal pour le parcours de trains
+ * Les parcours et les sections critiques sont codes
+ * en dur.
+ *
+ * Le fonctionnement du programme a ete teste en simulation
+ * uniquement.
+ * Grace aux boutons pause/start des locomotives
+ * plusieurs situations critiques ont etes testees.
+ *
+ * Ce code correspond au deuxieme ennonce.
+ *
+ * Auteurs : Kobel Nicolas
+ *           Maillard Romain
+ */
+
 //Creation d'une locomotive
 static Locomotive locomotive;
 static Locomotive loco2;
@@ -27,7 +43,7 @@ int cmain() {
     //Choix de la maquette
     selection_maquette(MAQUETTE_A);
 
-    //Initialisation d'un parcours
+    //Initialisation des parcours
     QList<int> parcours;
     parcours  << 19 << 13 << 15 << 14 << 7 << 6 << 1 << 31 << 30 << 29 << 28 << 22 << 21 << 20;
     QList<int> parcours2;
@@ -55,14 +71,14 @@ int cmain() {
     diriger_aiguillage(16, TOUT_DROIT,  0);
 
 
-    //Initialisation de la locomotive
+    //Initialisation de la premiere locomotive
     locomotive.fixerNumero(1);
     locomotive.fixerVitesse(12);
     locomotive.fixerPosition(19, 20);
     locomotive.allumerPhares();
-    //locomotive.demarrer();
     locomotive.afficherMessage("Ready!");
 
+    // Initialisation de la deuxieme locomotive
     loco2.fixerNumero(2);
     loco2.fixerVitesse(14);
     loco2.fixerPosition(23,24);
@@ -70,26 +86,18 @@ int cmain() {
     loco2.demarrer();
     loco2.afficherMessage("Loco2 Ready");
 
-
+    // Demare les trains
     tthread1 = new TrainThread(parcours, &locomotive, sectionCritique,manager,2);
     tthread2 = new TrainThread(parcours2, &loco2, sectionCritique,manager,1);
     tthread1->start();
     tthread2->start();
 
 
-    //Attente du passage sur les contacts
-
-    //Fin de la simulation
-
+    // Fin du parcours
     tthread1->wait();
-    //tthread2->wait();
+    tthread2->wait();
 
     mettre_maquette_hors_service();
-
-    //Exemple de commande
-    afficher_message("Enter a command in the input field at the top of the window.");
-    QString commande = getCommand();
-    afficher_message(qPrintable(QString("Your command is: ") + commande));
 
     return EXIT_SUCCESS;
 }
