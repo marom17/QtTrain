@@ -17,6 +17,12 @@ public:
         nbrTour = 0;
     }
 
+    ~TrainThread(){
+        delete sectionCritique;
+        delete manager;
+        delete train;
+    }
+
 private:
     virtual void run() Q_DECL_OVERRIDE;
     void changerAiguillage(int sectionCourrante, int sectionSuivante);
